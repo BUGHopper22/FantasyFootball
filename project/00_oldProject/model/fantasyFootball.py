@@ -1,6 +1,6 @@
 import pandas as pd
-from model.contendersTeams import contendersTeams 
-from model.roleLists import roleLists
+from .contendersTeams import contendersTeams 
+from .roleLists import roleList 
 
 
 class fantasyFootball():
@@ -17,26 +17,17 @@ class fantasyFootball():
         if newAuction:
             print('newAuction')
             # crea contendersName vuoti
-            self.contendersTeams = contendersTeams()
-            self.roleLists = roleLists()
-            print(self.roleLists.playersRemainDF)
-            print(self.roleLists.goalkeeperDF)
+            self.contendersTeams = self.contendersTeams()
+            self.roleLists = self.roleLists()
         else:
             print('loadDataFromFiles')
 
     def setContendersNames(self, contendersNames):
         self.contendersTeams.setContendersNames(contendersNames)
-        print('TESTTTTTTT')
-        print(self.fantasyFootball.contendersTeams.contendersTeams)
 
-    def randomPick(self,roleName):
+    def randomPlayer(self,roleName):
         print("randomPlayer")
-        #  return a list of string
-        singlePlayer = self.roleLists.randomPick(roleName)
-        
-        
-        return singlePlayer
-
+        return self.roleLists.randomPlayer(roleName)
 
     def addPlayerToTeam(self,contenderName,playerDF):
         print("addPlayerToTeam")

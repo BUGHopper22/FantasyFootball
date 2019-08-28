@@ -35,12 +35,7 @@ class contendersTeams():
     
     def setContendersNames(self, contendersNames):
         self.contendersNames = list(contendersNames)
-        self.contendersNames.append('rejected')
-        for name in self.contendersNames:
-            self.contendersTeams[name] = pd.DataFrame()
-        # self.contendersTeams['rejected'] = pd.DataFrame()
 
-    # the andom player was already remove from main dataframe
     def addValueToTeam(self,contenderName,playerDF):
         # update history
         self.historyInsertion.append(contenderName)

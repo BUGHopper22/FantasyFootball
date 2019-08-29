@@ -48,10 +48,11 @@ class contendersTeams():
 
 
 
-    def rejectPlayer(self,playerDF):
+    # rifatto ma nella lista dei contenderTeams nell'ultimo tema c è rejected team!!!!!
+    # def rejectPlayer(self,playerDF):
 
-        self.historyInsertion.append('rejected')
-        self.trashPlayers = self.trashPlayers.append(playerDF)
+    #     self.historyInsertion.append('rejected')
+    #     self.trashPlayers = self.trashPlayers.append(playerDF)
 
     # return last player insert in team and drop its
     def backOne(self):
@@ -70,6 +71,7 @@ class contendersTeams():
             # remove last row
             self.contendersTeams[lastContender].drop(self.contendersTeams[lastContender].index,inplace=True)
 
+        
         return lastInsertDF
 
     def saveAll(self,folderPath):

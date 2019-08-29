@@ -42,10 +42,78 @@ class auctionPage(QWidget):
         self.randomButton.clicked.connect(self.randomButtonAction)
         return self.randomGroup
 
-    # SLOT
-    def randomButtonAction(self):
+    
 
+    def createContendentButtonsGroup(self):
+        self.contendentGroup = QGroupBox('insert player in contender teams')
+        self.GBox = QVBoxLayout()
+        print('createContendentButtonsGroup')
+        
+        self.buttonDict = {}
+        # buttonL non utilizzato, potrebbe servire?
+        self.buttonL = []
+        for name in self.fantasyFootball.contendersTeams.contendersNames:
+            self.buttonDict[name] = QPushButton(name)
+            self.buttonDict[name].setEnabled(False)
+            
+            self.GBox.addWidget(self.buttonDict[name])
+
+            self.buttonL.append(self.buttonDict[name])
+
+            self.buttonDict[name].clicked.connect(lambda x=False, i=name: self.insertPlayerInTeam(x,i))
+        self.contendentGroup.setLayout(self.GBox)
+        return self.contendentGroup
+
+    def createUtilityButtonsGroup(self):
+        self.utilityGroup = QGroupBox('')
+
+        self.reintegrateButton = QPushButton()
+        self.reintegrateButton.setText('reintegrate last player')
+        self.discardsButton = QPushButton()
+        self.discardsButton.setText('restore discards')
+        self.saveButton = QPushButton()
+        self.saveButton.setText('save and change role')
+        
+        self.hBox = QHBoxLayout()
+        self.hBox.addWidget(self.reintegrateButton)
+        self.hBox.addWidget(self.discardsButton)
+        self.hBox.addWidget(self.saveButton)
+        
+        self.utilityGroup.setLayout(self.hBox)
+
+        self.reintegrateButton.setEnabled(False)
+
+        self.reintegrateButton.clicked.connect(self.reintegrateAction)
+        self.discardsButton.clicked.connect(self.discardsButtonAction)
+        self.saveButton.clicked.connect(self.saveButtonAndBackAction)
+        return self.utilityGroup
+    
+    # SLOT utility buttons
+    def reintegrateAction(self):
+        self.fantasyFootball.backOne()
+
+    def discardsButtonAction(self):
+        self.fantasyFootball.discardRejected()
+
+    def saveButtonAndBackAction(self):
+        self.fantasyFootball.saveAuciton()
+
+    # SLOT click teamName
+    # check if rejected in ok
+    def insertPlayerInTeam(self,isClicked,name):
+        # setButton disable or enable
+        for button in self.buttonDict.values():
+            button.setEnabled(False)
+        self.randomButton.setEnabled(True)
+
+        self.fantasyFootball.addPlayerToTeam(name,self.singlePlayer)
+        print('________ALL REMAIN PLAYER TEST WITH GOALKEEPER____________')
         print(self.fantasyFootball.roleLists.goalkeeperDF)
+        print('________ALL CONTENDER TEAMS____________')
+        print(self.fantasyFootball.contendersTeams.contendersTeams)
+
+    # SLOT click random button
+    def randomButtonAction(self):
 
         # setButton disable or enable
         for button in self.buttonDict.values():
@@ -65,69 +133,17 @@ class auctionPage(QWidget):
             self.singlePlayer = self.fantasyFootball.randomPick(self.role)
             # toPrint = name + squadra + quota iniziale
             toPrint = [] 
+            # name
             toPrint.append(self.singlePlayer.iloc[0,2])
+            # team
             toPrint.append(self.singlePlayer.iloc[0,3])
+            # quote
             toPrint.append(str(self.singlePlayer.iloc[0,5]))
             
             self.randomPlayerName.setText('Name:  ' + toPrint[0])
             self.randomPlayerTeam.setText('Team:  ' + toPrint[1])
             self.randomPlayerQuote.setText('Quote:  ' + toPrint[2])
             
-            # self.randomPlayerText.setText(singlePlayer)
-
-    def createContendentButtonsGroup(self):
-        self.contendentGroup = QGroupBox('insert player in contender teams')
-        self.GBox = QVBoxLayout()
-        print('createContendentButtonsGroup')
-        
-        self.buttonDict = {}
-        self.buttonL = []
-        for name in self.fantasyFootball.contendersTeams.contendersNames:
-            self.buttonDict[name] = QPushButton(name)
-            self.buttonDict[name].setEnabled(False)
-            
-            self.GBox.addWidget(self.buttonDict[name])
-
-            self.buttonL.append(self.buttonDict[name])
-            print(name)
-
-            self.buttonDict[name].clicked.connect(lambda x=False, i=name: self.insertPlayerInTeam(x,i))
-
-        
-        
-
-        self.contendentGroup.setLayout(self.GBox)
-        return self.contendentGroup
-
-    # SLOT
-    # IMPORTANTEEEEEEEEEEEEEE REJECTED PLAYER E' UN CASO  PARTICOLARE E BISOGNA CHIAMARE LA FUNZIONE REJECTEDPLAYER DI CONTENDERSTEAM
-    def insertPlayerInTeam(self,isClicked,name):
-        for button in self.buttonDict.values():
-            button.setEnabled(False)
-        self.randomButton.setEnabled(True)
-        print(name)
-        self.fantasyFootball.addPlayerToTeam(name,self.singlePlayer)
-        print(self.fantasyFootball.contendersTeams.contendersTeams)
 
 
-    def createUtilityButtonsGroup(self):
-        self.utilityGroup = QGroupBox('')
-
-        self.backOneButton = QPushButton()
-        self.backOneButton.setText('back one')
-        self.discardsButton = QPushButton()
-        self.discardsButton.setText('restore discards')
-        self.saveButton = QPushButton()
-        self.saveButton.setText('save and change role')
-        
-        self.hBox = QHBoxLayout()
-        self.hBox.addWidget(self.backOneButton)
-        self.hBox.addWidget(self.discardsButton)
-        self.hBox.addWidget(self.saveButton)
-        
-        self.utilityGroup.setLayout(self.hBox)
-
-        self.backOneButton.clicked.connect()
-        self.discardsButton.clicked.connect()
-        self.saveButton.clicked.connect()
-        return self.utilityGroup
+    

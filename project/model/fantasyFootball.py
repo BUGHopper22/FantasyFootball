@@ -19,15 +19,11 @@ class fantasyFootball():
             # crea contendersName vuoti
             self.contendersTeams = contendersTeams()
             self.roleLists = roleLists()
-            print(self.roleLists.playersRemainDF)
-            print(self.roleLists.goalkeeperDF)
         else:
             print('loadDataFromFiles')
 
     def setContendersNames(self, contendersNames):
         self.contendersTeams.setContendersNames(contendersNames)
-        print('TESTTTTTTT')
-        print(self.fantasyFootball.contendersTeams.contendersTeams)
 
     def randomPick(self,roleName):
         print("randomPlayer")
@@ -40,24 +36,40 @@ class fantasyFootball():
 
     def addPlayerToTeam(self,contenderName,playerDF):
         print("addPlayerToTeam")
-        if contenderName is 'rejected':
-            self.contendersTeams.rejectPlayer(playerDF)
-        else:
-            self.contendersTeams.addValueToTeam(contenderName,playerDF)
+        # if contenderName is 'rejected':
+        #     print('add player to rejected team')
+        #     self.contendersTeams.rejectPlayer(playerDF)
+        # else:
+        self.contendersTeams.addValueToTeam(contenderName,playerDF)
     
     def saveAuciton(self):
-        print("saveAuction")
+        print("saveAuction called")
         folderPath = '??'
         self.contendersTeams.saveAll(folderPath)
         self.roleLists.saveAll(folderPath)
         
 
-    def backOne():
-        print("backOne")
+    def backOne(self):
+        # remove last player insert in contender team
+        self.lastPlayerInsert = self.contendersTeams.backOne()
+        print(type(self.lastPlayerInsert))
+        print(self.lastPlayerInsert)
+        print(self.lastPlayerInsert.iloc[0,1])
+        # check the rigth role
+        if( self.lastPlayerInsert.iloc[0,1] == 'P'):
+            role = 'goalkeeper'
+        if( self.lastPlayerInsert.iloc[0,1] == 'D'):
+            role = 'defender'
+        if( self.lastPlayerInsert.iloc[0,1] == 'M'):
+            role = 'midfielder'
+        if( self.lastPlayerInsert.iloc[0,1] == 'F'):
+            role = 'forward'
+        
+        # add lastPlayer to adeguate role list
+        self.roleLists.addPlayer(self.lastPlayerInsert,role)
 
-    
-
-    
+    def discardRejected(self):
+        print('discard rejected called')
 
     def loadFromFolder(self):
         print("loadFromFolder")

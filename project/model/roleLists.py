@@ -35,7 +35,6 @@ class roleLists():
     # return a randomPlayerDF and remove it from DFParameter
     def randomPick(self,roleName):
         if roleName is 'goalkeeper':
-            # print(self)
             randomPlayer = self.goalkeeperDF.sample(n=1,replace=True)
             # get id
             idPlayer = randomPlayer.iloc[0,0]
@@ -66,18 +65,27 @@ class roleLists():
 
     # to use in case of back button
     def addPlayer(self,playerDF,role):
+        print('enter in addPlayer roleLists and')
+        print('player is:')
+        print(playerDF)
         if role is 'goalkeeper':
-            self.goalkeeper.append(playerDF)
+            print('enter in if goalkeeper')
+            print(self.goalkeeperDF.shape)
+            self.goalkeeperDF.append(playerDF,ignore_index=True)
+            print('test after reindert player in goalkeeperDF')
+            print(self.goalkeeperDF.shape)
         if role is 'defender':
-            self.defender.append(playerDF)
+            print('enter in if defender')
+            self.defenderDF.append(playerDF)
         if role is 'midfielder':
-            self.midfielder.append(playerDF)
+            print('enter in if midfielder')
+            self.midfielderDF.append(playerDF)
         if role is 'forward':
-            self.forward.append(playerDF)
+            print('enter in if forward')
+            self.forwardDF.append(playerDF)
 
 # _____molto importante___get single random value____!!!!
 # return random value of id column from dataframe
 # randomId = self.goalkeeper['Id'].sample(n=1).iloc[0]
-# print('randomId',randomId)
 
 

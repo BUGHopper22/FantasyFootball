@@ -20,7 +20,7 @@ class mainPage(QWidget):
 
         self.introductionPage = introductionPage()
         self.contenderPage = contenderPage(self.fantasyFootball)
-        self.roleButtonPage = roleButtonPage()
+        self.roleButtonPage = roleButtonPage(self.fantasyFootball)
         # self.auctionPage = auctionPage(self.fantasyFootball,'')
 
         self.introductionPage.setVisible(True)
@@ -38,6 +38,7 @@ class mainPage(QWidget):
         self.introductionPage.loadAuction.clicked.connect(self.loadAuctionAction)
 
         self.contenderPage.contenderFinishButton.clicked.connect(self.finishContenderAction)
+        
 
 
         # self.roleButtonPage.goalkeeperButton.clicked.connect(lambda: self.roleButtonAction('goalkeeper')) OPEN PAGE IN NEW WINDOW
@@ -58,16 +59,20 @@ class mainPage(QWidget):
         
 
     def loadAuctionAction(self):
-        fd = QFileDialog()
+        # fd = QFileDialog()
         # fd.setOption(tr('0x00000001'), True)
-        path_to_file = fd.getOpenFileName(self, self.tr("Load Fasta"), self.tr("./data") , self.tr("Folders"))
-        path_to_file = fd.getOpenFileName(self, self.tr("Load Fasta"), self.tr("./data") , self.tr("Folders"))
-        # self.tr("./data")
+        # path_to_file = fd.getOpenFileName(self, self.tr("Load Fasta"), self.tr("./data") , self.tr("Folders"))
+        # path_to_file = fd.getOpenFileName(self, self.tr("Load Fasta"), self.tr("./data") , self.tr("Folders"))
+
+        dirToLoad = QFileDialog.getExistingDirectory(self, self.tr("Open Directory"),
+                                            self.tr("Load Fasta"),
+                                            QFileDialog.ShowDirsOnly or QFileDialog.DontResolveSymlinks)
+
+        print('CALL LOAD DATA FROM PAGE BUTTON')
+        self.fantasyFootball = fantasyFootball(isNewAuction = False, folderPath = dirToLoad)
         
-        # dialog = QFileDialog()
-        # dialog.ShowDirsOnly
-        # dialog.setFileMode(QFileDialog.fileMode.directory)
-        # dialog.open()
+        self.introductionPage.hide() 
+        self.roleButtonPage.setVisible(True)
 
     def finishContenderAction(self):
         print('OK')
@@ -89,4 +94,10 @@ class mainPage(QWidget):
         # self.auctionPage.externalLayout.update()
         self.roleButtonPage.hide()
         # self.auctionPage.setVisible(True)
+
+        self.auctionPage.backToRole.clicked.connect(self.backToRoleAuction)
+
+    def backToRoleAuction(self):
+        self.auctionPage.hide()
+        self.roleButtonPage.setVisible(True)
 

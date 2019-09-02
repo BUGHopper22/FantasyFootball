@@ -1,8 +1,10 @@
 from PySide2.QtWidgets import QWidget, QPushButton, QVBoxLayout, QButtonGroup
 
 class roleButtonPage(QWidget):
-    def __init__(self):
+    def __init__(self,fantasyFootball):
         super(roleButtonPage, self).__init__()
+
+        self.fantasyFootball = fantasyFootball
 
         self.goalkeeperButton = QPushButton('goalkeeper')
         self.defenderButton = QPushButton('defender')
@@ -15,6 +17,7 @@ class roleButtonPage(QWidget):
         self.forwardButton.setMinimumHeight(100)
 
         self.saveAllButton = QPushButton('save Auction')
+        self.saveAllButton.clicked.connect(self.saveAllAction)
 
         self.layout = QVBoxLayout()
 
@@ -29,3 +32,6 @@ class roleButtonPage(QWidget):
         
 
         self.setLayout(self.layout)
+
+    def saveAllAction(self):
+        self.fantasyFootball.saveAuction()

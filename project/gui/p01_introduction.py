@@ -11,7 +11,7 @@ class introductionPage(QWidget):
         self.startAuction.setMinimumHeight(150)
         self.loadAuction.setMinimumHeight(150)
         self.exitAuction.setMinimumHeight(150)
-        self.loadAuction.setEnabled(False)
+        self.loadAuction.setEnabled(True)
         
 
         # b2.setVisible(False)

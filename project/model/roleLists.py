@@ -58,10 +58,10 @@ class roleLists():
         return randomPlayer
 
     def saveAll(self,folderPath):
-        self.goalkeeper.to_csv(folderPath + '/goalkeeper.csv',index=False)
-        self.defender.to_csv(folderPath + '/defender.csv',index=False)
-        self.midfielder.to_csv(folderPath + '/midfielder.csv',index=False)
-        self.forward.to_csv(folderPath + '/forward.csv',index=False)
+        self.goalkeeperDF.to_csv(folderPath + '/goalkeeper.csv',index=False)
+        self.defenderDF.to_csv(folderPath + '/defender.csv',index=False)
+        self.midfielderDF.to_csv(folderPath + '/midfielder.csv',index=False)
+        self.forwardDF.to_csv(folderPath + '/forward.csv',index=False)
 
     # to use in case of back button
     def addPlayer(self,playerDF,role):

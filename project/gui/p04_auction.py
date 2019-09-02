@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QPushButton, QVBoxLayout, QGroupBox, QHBoxLayout, QLabel, QGridLayout
+from PySide2.QtWidgets import QWidget, QPushButton, QVBoxLayout, QGroupBox, QHBoxLayout, QLabel, QGridLayout, QListWidget 
 
 class auctionPage(QWidget):
     def __init__(self,fantasyFootball,role):
@@ -7,16 +7,120 @@ class auctionPage(QWidget):
         self.fantasyFootball = fantasyFootball
         self.role = role
 
-        self.externalLayout = QVBoxLayout()
 
-        self.externalLayout.addWidget(self.createRandomGroup())
-        self.externalLayout.addWidget(self.createContendentButtonsGroup())
-        self.externalLayout.addWidget(self.createUtilityButtonsGroup())
+        self.externalLayout = QHBoxLayout()
+        self.externalLayout.addWidget(self.sxGroupBox())
+        self.externalLayout.addWidget(self.dxGroupBox())
         self.setLayout(self.externalLayout)
 
         
 
-        self.setLayout(self.externalLayout)
+        
+
+        
+
+    def sxGroupBox(self):
+        self.sxGroupBox = QGroupBox('new Player')
+
+        self.auctionLayout = QVBoxLayout()
+        self.auctionLayout.addWidget(self.createRandomGroup())
+        self.auctionLayout.addWidget(self.createContendentButtonsGroup())
+        self.auctionLayout.addWidget(self.createUtilityButtonsGroup())
+        self.sxGroupBox.setLayout(self.auctionLayout)
+
+        return self.sxGroupBox
+
+
+
+
+
+
+    def dxGroupBox(self):
+        self.dxGroupBox = QGroupBox('Teams')
+
+        self.teamListLayout = QGridLayout()
+        i = 0
+        self.listWidgetCol = {}
+        self.removeButtonList = {}
+
+        for contender in self.fantasyFootball.contendersTeams.contendersNames:
+            self.titleList = QLabel(contender)
+
+            self.listWidgetCol[contender] = QListWidget()
+
+            
+
+            i_button = 0
+            for singlePlayer in self.fantasyFootball.contendersTeams.contendersTeams[contender].iterrows(): 
+                print('singlePlayer = ',singlePlayer)
+                playerToAdd = singlePlayer[1]
+                playerName = playerToAdd.get(key = 'Nome')
+                playerRole = playerToAdd.get(key = 'R')
+                finalString = playerRole + ' ' + playerName
+                self.listWidgetCol[contender].addItem(finalString)
+
+                
+            self.removeButtonList[contender] = (QPushButton('Remove Selected'))
+            self.removeButtonList[contender].setEnabled(False)
+            self.removeButtonList[contender].clicked.connect(lambda x=False, contender=contender: self.removeFromContender(x,contender))
+
+            print('i',i)
+            
+            self.teamListLayout.setColumnMinimumWidth(i,130)
+            # self.teamListLayout.setColumnMinimumWidth(i+1,1)
+
+            self.teamListLayout.addWidget(self.titleList,0,i)
+            
+            self.teamListLayout.addWidget(self.listWidgetCol[contender],1,i)
+            self.teamListLayout.addWidget(self.removeButtonList[contender],2,i)
+            
+            i += 1
+
+        self.dxGroupBox.setLayout(self.teamListLayout)
+        return self.dxGroupBox
+
+    def removeFromContender(self,isClicked,contender):
+
+        itemSelected = self.listWidgetCol[contender].selectedItems()
+        print(itemSelected)
+        print(itemSelected)
+        print(itemSelected)
+        print(itemSelected)
+        if itemSelected: 
+            print("ECCOLO")
+            # self.listWidgetCol[contender].takeTopLevelItem(itemSelected)
+            # self.fantasyFootball.backOne()
+
+        # else:
+        #     self.
+        # for item in listItems:
+        #     itemIndex=self.listA.indexOfTopLevelItem(item)
+        #     self.listA.takeTopLevelItem(itemIndex)
+        # print '\n\t Number of items remaining', self.listA.topLevelItemCount()
+
+
+
+        # check if is possible to return player or we are in another role aution
+        # if (len(self.fantasyFootball.contendersTeams.contendersTeams[contender]) == 0):
+        #     self.reintegrateButton.setEnabled(False)
+        # else:
+        #     self.reintegrateButton.setEnabled(True)
+        #     self.fantasyFootball.backOne()
+
+        #     lastContender = self.historyInsertion[len(self.historyInsertion)-1]
+        #     # remove last item insert
+        #     self.listWidgetCol[lastContender].takeItem(self.listA.row(item))
+        #     self.listWidgetCol[lastContender].item((QStringList.size()-1)).setSelected(True)
+
+
+
+
+
+
+    # def createsingleListView(self):
+    #     print('p')
+    #     self.test = QLabel('dfizuvhp')
+    #     return self.test
 
     def setRole(self,role):
         self.role = role
@@ -67,40 +171,46 @@ class auctionPage(QWidget):
     def createUtilityButtonsGroup(self):
         self.utilityGroup = QGroupBox('')
 
-        self.reintegrateButton = QPushButton()
-        self.reintegrateButton.setText('reintegrate last player')
-        self.discardsButton = QPushButton()
-        self.discardsButton.setText('restore discards')
-        self.saveButton = QPushButton()
-        self.saveButton.setText('save and change role')
+        self.backToRole = QPushButton()
+        self.backToRole.setText('back to roles')
         
         self.hBox = QHBoxLayout()
-        self.hBox.addWidget(self.reintegrateButton)
-        self.hBox.addWidget(self.discardsButton)
-        self.hBox.addWidget(self.saveButton)
+        self.hBox.addWidget(self.backToRole)
         
         self.utilityGroup.setLayout(self.hBox)
 
-        self.reintegrateButton.setEnabled(False)
 
-        self.reintegrateButton.clicked.connect(self.reintegrateAction)
-        self.discardsButton.clicked.connect(self.discardsButtonAction)
-        self.saveButton.clicked.connect(self.saveButtonAndBackAction)
+        # self.backToRole.clicked.connect is implement in page 0
+
         return self.utilityGroup
     
     # SLOT utility buttons
     def reintegrateAction(self):
-        self.fantasyFootball.backOne()
+        # check if is possible to return player or we are in another role aution
+
+            lastContender = self.historyInsertion[len(self.historyInsertion)-1]
+            # remove last item insert
+            self.listWidgetCol[lastContender].takeItem(self.listA.row(item))
+            self.listWidgetCol[lastContender].item((QStringList.size()-1)).setSelected(True)
+            # self.listWidgetCol[contender].remove
+
+        # if self.fantasyFootball.checkRole(self.role):
+        #     self.reintegrateButton.setEnabled(True)
+            
+        #     self.fantasyFootball.backOne(self.role)
 
     def discardsButtonAction(self):
         self.fantasyFootball.discardRejected()
 
-    def saveButtonAndBackAction(self):
-        self.fantasyFootball.saveAuciton()
 
     # SLOT click teamName
     # check if rejected in ok
     def insertPlayerInTeam(self,isClicked,name):
+        # reset random playerView
+        self.randomPlayerName.setText('')
+        self.randomPlayerTeam.setText('')
+        self.randomPlayerQuote.setText('')
+
         # setButton disable or enable
         for button in self.buttonDict.values():
             button.setEnabled(False)
@@ -112,8 +222,19 @@ class auctionPage(QWidget):
         print('________ALL CONTENDER TEAMS____________')
         print(self.fantasyFootball.contendersTeams.contendersTeams)
 
+        playerToAdd = self.singlePlayer.iloc[0,2]
+        self.listWidgetCol[name].addItem(playerToAdd)
+
     # SLOT click random button
     def randomButtonAction(self):
+        # check if possible to turn back a player or not and set right button visibility
+        print(self.fantasyFootball.checkRole(self.role))
+        print(self.role)
+        print(len(self.fantasyFootball.contendersTeams.historyInsertion))
+        print(len(self.fantasyFootball.contendersTeams.historyInsertion))
+        print(len(self.fantasyFootball.contendersTeams.historyInsertion))
+        print(len(self.fantasyFootball.contendersTeams.historyInsertion))
+        print(len(self.fantasyFootball.contendersTeams.historyInsertion))
 
         # setButton disable or enable
         for button in self.buttonDict.values():

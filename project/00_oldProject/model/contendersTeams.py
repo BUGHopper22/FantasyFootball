@@ -70,9 +70,11 @@ class contendersTeams():
     def saveAll(self,folderPath):
         # Alberto.csv, Giovanni.csv, Giacomo.csv, contenderName.csv
 
+        
+
         #  CHECK WHEN FILE ALREADY EXHIST
-        for name in self.contendersNames:
-            self.contendersTeams[name].to_csv(folderPath + '/contendersTeams/' + name + '.csv',index=False)
+        # for name in self.contendersNames:
+        #     self.contendersTeams[name].to_csv(folderPath + '/contendersTeams/' + name + '.csv',index=False)
 
         # POTREBBE ESSERCI UN PROBLEMA CON IL '.' PRIMO ELEMENTO DELLA RIGAA
         if os.path.exists(folderPath + '/contendersNames.csv'):  

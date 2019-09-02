@@ -11,6 +11,7 @@ class contendersTeams():
     contendersTeams = {}
 
     def __init__(self,isNewAuction = True, contendersNames = [], folderPath = ''):
+        print('isNewAuction',isNewAuction)
         # case : new auction
         if isNewAuction:
             # contenderName
@@ -23,6 +24,7 @@ class contendersTeams():
         # case : load from files
         else:
             # contenderName
+            print('costruisce contenderTeams da files')
             contendersNamesDF = pd.read_csv(folderPath + '/contendersNames.csv')
             
             for i in range(0,contendersNamesDF.size):
@@ -39,11 +41,42 @@ class contendersTeams():
         for name in self.contendersNames:
             self.contendersTeams[name] = pd.DataFrame()
         # self.contendersTeams['rejected'] = pd.DataFrame()
+    
+    def checkRole(self,roleTocheck):
+        isRightRole = False
+        print(len(self.historyInsertion))
+        print(len(self.historyInsertion))
+        print(len(self.historyInsertion))
+        print(len(self.historyInsertion))
+        if len(self.historyInsertion) is not 0:
+            print('la size è maggiore di zero')
+            lastContender = self.historyInsertion[len(self.historyInsertion)-1]
+            lastInsertRole = self.contendersTeams[lastContender].iloc[0,1]
+            
+            if( lastInsertRole == 'P'):
+                role = 'goalkeeper'
+            if( lastInsertRole == 'D'):
+                role = 'defender'
+            if( lastInsertRole == 'C'):
+                role = 'midfielder'
+            if( lastInsertRole == 'A'):
+                role = 'forward'
+            
+            
+            
+            
+            print(roleTocheck,'==',role)
+            if roleTocheck is role:
+                isRightRole = True
+        return isRightRole
+
 
     # the andom player was already remove from main dataframe
     def addValueToTeam(self,contenderName,playerDF):
         # update history
+        print('BEFOREHIS',len(self.historyInsertion))
         self.historyInsertion.append(contenderName)
+        print('AFTERHIS',len(self.historyInsertion))
         self.contendersTeams[contenderName] = self.contendersTeams[contenderName].append(playerDF)
 
 
@@ -77,19 +110,30 @@ class contendersTeams():
     def saveAll(self,folderPath):
         # Alberto.csv, Giovanni.csv, Giacomo.csv, contenderName.csv
 
-        #  CHECK WHEN FILE ALREADY EXHIST
-        for name in self.contendersNames:
-            self.contendersTeams[name].to_csv(folderPath + '/contendersTeams/' + name + '.csv',index=False)
-
-        # POTREBBE ESSERCI UN PROBLEMA CON IL '.' PRIMO ELEMENTO DELLA RIGAA
-        if os.path.exists(folderPath + '/contendersNames.csv'):  
-            os.remove(folderPath + '/contendersNames.csv')
-    
-
+        # convert list in DF 
         contendersNamesDict = {'name':self.contendersNames}
         contendersNamesDF = pd.DataFrame(data=contendersNamesDict)
-
         contendersNamesDF.to_csv(folderPath + '/contendersNames.csv',index=False)
+        
+
+        contenderTeamsFolder = folderPath + '/contendersTeams/'
+        # create a folder if not exhist
+        if not os.path.exists(contenderTeamsFolder):
+            print('non esiste ', contenderTeamsFolder)
+            os.makedirs(contenderTeamsFolder)
+
+        for name in self.contendersNames:
+            self.contendersTeams[name].to_csv(contenderTeamsFolder + name + '.csv',index=False)
+
+
+        
+
+        # POTREBBE ESSERCI UN PROBLEMA CON IL '.' PRIMO ELEMENTO DELLA RIGAA
+        # if os.path.exists(folderPath + '/contendersNames.csv'):  
+        #     os.remove(folderPath + '/contendersNames.csv')
+    
+
+        
 
 
     

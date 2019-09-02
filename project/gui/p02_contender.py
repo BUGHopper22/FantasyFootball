@@ -1,3 +1,4 @@
+
 from PySide2.QtWidgets import QWidget, QPushButton, QVBoxLayout, QGroupBox, QLabel, QComboBox, QHBoxLayout, QLineEdit, QGridLayout
 
 class contenderPage(QWidget):
@@ -108,7 +109,6 @@ class contenderPage(QWidget):
             self.lineEditText.append(self.lineEditInfo[i].text()) 
         print(self.lineEditText)
         self.fantasyFootball.setContendersNames(self.lineEditText)
-        print(fantasyFootball.setContendersNames)
 
         
 

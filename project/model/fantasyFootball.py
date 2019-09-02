@@ -1,6 +1,7 @@
 import pandas as pd
 from model.contendersTeams import contendersTeams 
 from model.roleLists import roleLists
+import os
 
 
 class fantasyFootball():
@@ -12,15 +13,16 @@ class fantasyFootball():
 
     def __init__(self, isNewAuction = True, folderPath = ''):
         print("start")
-        newAuction  = True
         # build fields by default
-        if newAuction:
-            print('newAuction')
+        if isNewAuction:
+            print('newAuction in fantasyFootball')
             # crea contendersName vuoti
             self.contendersTeams = contendersTeams()
             self.roleLists = roleLists()
         else:
+
             print('loadDataFromFiles')
+            self.loadFromFolder(folderPath)
 
     def setContendersNames(self, contendersNames):
         self.contendersTeams.setContendersNames(contendersNames)
@@ -42,19 +44,34 @@ class fantasyFootball():
         # else:
         self.contendersTeams.addValueToTeam(contenderName,playerDF)
     
-    def saveAuciton(self):
+    def saveAuction(self):
         print("saveAuction called")
-        folderPath = '??'
+        folderPath = './data/save'
+        
+
+        # check file in  directory
+        # for (dirpath, dirnames, filenames) in os.walk(folderPath):
+        #     print(filenames)
+
         self.contendersTeams.saveAll(folderPath)
         self.roleLists.saveAll(folderPath)
         
+    def checkRole(self,roleTocheck):
+        toP = self.contendersTeams.checkRole(roleTocheck)
+        print('final',toP)
+        print('final',toP)
+        print('final',toP)
+        print('final',toP)
+        return toP
+
 
     def backOne(self):
+        
+        
+
         # remove last player insert in contender team
         self.lastPlayerInsert = self.contendersTeams.backOne()
-        print(type(self.lastPlayerInsert))
-        print(self.lastPlayerInsert)
-        print(self.lastPlayerInsert.iloc[0,1])
+
         # check the rigth role
         if( self.lastPlayerInsert.iloc[0,1] == 'P'):
             role = 'goalkeeper'
@@ -64,6 +81,10 @@ class fantasyFootball():
             role = 'midfielder'
         if( self.lastPlayerInsert.iloc[0,1] == 'F'):
             role = 'forward'
+
+        print(type(self.lastPlayerInsert))
+        print(self.lastPlayerInsert)
+        print(self.lastPlayerInsert.iloc[0,1])
         
         # add lastPlayer to adeguate role list
         self.roleLists.addPlayer(self.lastPlayerInsert,role)
@@ -71,8 +92,11 @@ class fantasyFootball():
     def discardRejected(self):
         print('discard rejected called')
 
-    def loadFromFolder(self):
+    def loadFromFolder(self, folderPath):
         print("loadFromFolder")
+        self.contendersTeams = contendersTeams(isNewAuction = False, contendersNames = None,folderPath = folderPath)
+        print('DA FARE ROLE LIST LOAD NON FATTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        # self.roleLists. = roleLists(isNewAuction = False,folderPath)
 
     # def saveContendersName():
     #     print("saveContendersName")
